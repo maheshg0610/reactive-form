@@ -1,66 +1,111 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Validators } from '@angular/forms';
-import { FormArray } from '@angular/forms';
+import { Component, OnInit } from "@angular/core";
+import { AfterViewInit, ViewChild } from "@angular/core";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 
 @Component({
-  selector: 'app-user-details',
-  templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.scss']
+  selector: "app-user-details",
+  templateUrl: "./user-details.component.html",
+  styleUrls: ["./user-details.component.scss"]
 })
-export class UserDetailsComponent implements OnInit {
-  registerForm!: FormGroup;
-  submitted = false;
-  myProperty = true;
+export class UserDetailsComponent implements AfterViewInit {
+  constructor() {}
 
-  constructor(private formBuilder: FormBuilder) {}
+  displayedColumns: string[] = [
+    "FirstName",
+    "LastName",
+    "DOB",
+    "Gender",
+    "Status"
+  ];
+  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
-  ngOnInit() {
-    this.registerForm = this.formBuilder.group(
-      {
-        gender: ['', Validators.required],
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
-        // validates date format yyyy-mm-dd
-        dob: [
-          '',
-          [
-            Validators.required,
-            Validators.pattern(
-              /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/
-            )
-          ]
-        ],
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
 
-        status: [false, Validators.requiredTrue]
-      },
-      {
-        //validator: MustMatch('password', 'confirmPassword')
-      }
-    );
-  }
-
-  // convenience getter for easy access to form fields
-  get f() {
-    return this.registerForm.controls;
-  }
-
-  onSubmit() {
-    this.submitted = true;
-
-    // stop here if form is invalid
-    if (this.registerForm.invalid) {
-      return;
-    }
-
-    // display form values on success
-    alert(
-      'SUCCESS!! :-)\n\n' + JSON.stringify(this.registerForm.value, null, 4)
-    );
-  }
-
-  onReset() {
-    this.submitted = false;
-    this.registerForm.reset();
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 }
+
+export interface PeriodicElement {
+  FirstName: string;
+  LastName: string;
+  DOB: string;
+  Gender: string;
+  Status: string;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+  {
+    FirstName: "Mahesh",
+    LastName: "G",
+    DOB: "13/06/1986",
+    Gender: "Male",
+    Status: "Active"
+  },
+  {
+    FirstName: "Kranthi",
+    LastName: "G",
+    DOB: "24/07/1983",
+    Gender: "Male",
+    Status: "Active"
+  },
+  {
+    FirstName: "Sunny",
+    LastName: "K",
+    DOB: "17/01/1990",
+    Gender: "Male",
+    Status: "InActive"
+  },
+  {
+    FirstName: "Hari",
+    LastName: "K",
+    DOB: "04/03/1988",
+    Gender: "Male",
+    Status: "InActive"
+  },
+  {
+    FirstName: "Prasad",
+    LastName: "M",
+    DOB: "09/10/1992",
+    Gender: "Male",
+    Status: "Active"
+  },
+  {
+    FirstName: "Prasad",
+    LastName: "M",
+    DOB: "09/10/1992",
+    Gender: "Male",
+    Status: "Active"
+  },
+  {
+    FirstName: "Hari",
+    LastName: "K",
+    DOB: "04/03/1988",
+    Gender: "Male",
+    Status: "InActive"
+  },
+  {
+    FirstName: "Kranthi",
+    LastName: "G",
+    DOB: "24/07/1983",
+    Gender: "Male",
+    Status: "Active"
+  },
+  {
+    FirstName: "Sunny",
+    LastName: "K",
+    DOB: "17/01/1990",
+    Gender: "Male",
+    Status: "InActive"
+  },
+
+  {
+    FirstName: "Mahesh",
+    LastName: "G",
+    DOB: "13/06/1986",
+    Gender: "Male",
+    Status: "Active"
+  }
+];
